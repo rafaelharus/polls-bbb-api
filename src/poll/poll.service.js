@@ -8,7 +8,7 @@ const { validatePollSchema } = require("../validator");
 class PollService extends Baseservice {
   constructor(opts) {
     super(opts);
-    this.repository = opts.PollService;
+    this.repository = opts.pollMapper;
   }
 
   async create(data) {

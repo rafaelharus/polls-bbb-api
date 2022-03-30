@@ -1,6 +1,6 @@
 module.exports = () => ({
   name: "person",
-  collectionName: "poeple",
+  collectionName: "person",
   type: "object",
   properties: {
     name: { type: "string", minLength: 2, maxLength: 255 },

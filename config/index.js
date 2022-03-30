@@ -14,8 +14,8 @@ const config = {
   version,
   auth: [
     {
-      identity: "401557cf-cd59-410e-9d55-8ba796955f5c",
-      credential: "b7ffeb5ff0a14453fe725f8277532897e4437a14",
+      identity: "95e650310aa401b5852d63e59aa3a0cc",
+      credential: "608743237e4faa8163c7a33121802996",
     },
   ],
   ...envConfig,
