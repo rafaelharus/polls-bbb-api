@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  polls-bbb-mongo:
+    image: mongo:3.4
+    container_name: polls-bbb-mongo
+    volumes:
+      - ./.docker/data/mongo:/data/db:rw
+    ports:
+      - "27017:27017"
+    networks:
+      - polls-bbb-network
+
+  polls-bbb-node:
+    image: rafaelharus/polls-bbb-node
+    container_name: polls-bbb-node
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: mongodb://polls-bbb-mongo:27017
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - polls-bbb-mongo
+    networks:
+      - polls-bbb-network
+
+  polls-bbb-api:
+    image: nginx:latest
+    container_name: polls-bbb-api
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./.docker/nginx/api.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - polls-bbb-node
+    networks:
+      - polls-bbb-network
+networks:
+  polls-bbb-network:
+    driver: bridge
