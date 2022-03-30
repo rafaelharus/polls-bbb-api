@@ -1,0 +1,322 @@
+servers:
+  - url: http://localhost:3000
+openapi: "3.0.0"
+info:
+  title: API Polls BBB Node
+  version: 1.0.4
+  description: Simple API for Polls BBB CRUD operations.
+  contact:
+    name: Rafael Harus
+    email: rafael.harus@gmail.com
+security:
+  - basicAuth: []
+paths:
+  '/v1/poll':
+    get:
+      tags:
+        - "poll"
+      summary: Fetch all polls
+      parameters:
+        - in: query
+          name: people
+          schema:
+            type: "string"
+            example: "95f2166b-5c07-48e7-9a23-e0a99443d004"
+          required: false
+          description: Search personId for filtering in people.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            example: "createdAt"
+          required: false
+          description: Flag to define field to sort on
+        - in: query
+          name: order
+          schema:
+            type: integer
+            format: int32
+            example: 1
+          required: false
+          description: Flag to define sort order (-1 descending and 1 ascending)
+      responses:
+        200:
+          description: Polls collection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PollListOk"
+        429:
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitError'
+    post:
+      tags:
+        - poll
+      summary: Create a poll
+      requestBody:
+          required: true
+          description: Poll object
+          content:
+            application/json:
+              schema:
+                properties:
+                  people:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PeopleObject'
+      responses:
+        422:
+          description: Validation failure
+          content: {}
+        201:
+          description: Item successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PollObject'
+  '/v1/poll/{id}':
+    get:
+      tags:
+        - poll
+      summary: Fetch a poll
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: "string"
+            example: "95f2166b-5c07-48e7-9a23-e0a99443d004"
+          required: true
+      responses:
+        200:
+          description: Fetch success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PollObject'
+        404:
+          description: Poll not found
+          content: {}
+
+  '/v1/answer':
+    post:
+      tags:
+        - answer
+      summary: Create a answer
+      requestBody:
+          description: Answer object
+          required: true
+          content:
+            application/json:
+              schema:
+                properties:
+                  personId:
+                    type: string
+                    format: uuid
+                    example: "90e55853-16ca-49a9-90bd-1dee256ab233"
+                  pollId:
+                    type: string
+                    format: uuid
+                    example: "95f21e0e-72d8-48c0-8158-c758ebbb9cca"
+                  userAgent:
+                    type: string
+                    example: "Mozilla/5.0 (Linux; U; Android 2.2) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"
+                  ip:
+                    type: string
+                    example: "172.217. 22.14"
+      responses:
+        422:
+          description: Validation failure
+          content: {}
+        201:
+          description: Item successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnswerObject'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    RateLimitError:
+      type: "object"
+      properties:
+        title:
+          type: "string"
+          example: "Too Many Requests"
+        type:
+          type: "string"
+          format: "uri"
+          example: "https://httpstatus.com/429"
+        status:
+          type: "integer"
+          example: 429
+        detail:
+          type: "string"
+          example: "Sometimes You Just Have to Slow Down."
+    PollListOk:
+      type: "object"
+      properties:
+        _total_items:
+          type: integer
+          format: int32
+        _page:
+          type: integer
+          format: int32
+        _page_count:
+          type: integer
+          format: int32
+        _links:
+          type: object
+          properties:
+            self:
+              type: object
+              properties:
+                href:
+                  type: string
+                  example:
+                    "http://{{host}}/v1/poll?page=1"
+        _embedded:
+          type: object
+          properties:
+            polls:
+              type: "array"
+              items:
+                $ref: '#/components/schemas/PollObject'
+    AnswerListOk:
+      type: "object"
+      properties:
+        _total_items:
+          type: integer
+          format: int32
+        _page:
+          type: integer
+          format: int32
+        _page_count:
+          type: integer
+          format: int32
+        _links:
+          type: object
+          properties:
+            self:
+              type: object
+              properties:
+                href:
+                  type: string
+                  example:
+                    "http://{{host}}/v1/answer?page=1"
+        _embedded:
+          type: object
+          properties:
+            states:
+              type: "array"
+              items:
+                $ref: '#/components/schemas/AnswerObject'
+    PollObject:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+          example:
+            "90e55853-16ca-49a9-90bd-1dee256ab233"
+        people:
+          type: "array"
+          format: "uuid"
+          items:
+            $ref: '#/components/schemas/PeopleObject'
+        createdAt:
+          type: string
+          format: 'date-time'
+          example:
+            "2022-03-30T01:50:37-03:00"
+        updatedAt:
+          type: string
+          format: 'date-time'
+          example:
+            "2022-03-30T01:50:37-03:00"
+        enddAt:
+          type: string
+          format: 'date-time'
+          example:
+            "2022-04-01T01:50:37-03:00"
+        deleted:
+          type: boolean
+          example: false
+        deletedAt:
+          type: string
+          format: 'date-time'
+          example:
+            "2022-03-30T01:50:37-03:00"
+        _links:
+          type: object
+          properties:
+            self:
+              type: object
+              properties:
+                href:
+                  type: string
+                  example:
+                    "http://{{host}}/v1/poll/90e55853-16ca-49a9-90bd-1dee256ab233"
+    AnswerObject:
+      type: "object"
+      properties:
+        id:
+          type: string
+          format: uuid
+          example:
+            "90e55853-16ca-49a9-90bd-1dee256ab234"
+        personId:
+          type: string
+          format: uuid
+          example:
+            "95f21f45-8cd8-41b8-9ba7-3a3c39bf2f7a"
+        pollId:
+          type: string
+          format: uuid
+          example:
+            "90e55853-16ca-49a9-90bd-1dee256ab233"
+        userAgent:
+          type: string
+          example:
+            "Mozilla/5.0 (Linux; U; Android 2.2) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"
+        ip:
+          type: string
+          example:
+            "172.217. 22.14"
+        createdAt:
+          type: string
+          format: 'date-time'
+          example:
+            "2022-03-30T01:50:37-03:00"
+        updatedAt:
+          type: string
+          format: 'date-time'
+          example:
+            "2022-03-30T01:50:37-03:00"
+        deleted:
+          type: boolean
+          example: false
+        deletedAt:
+          type: string
+          format: 'date-time'
+          example:
+            "2022-03-30T01:50:37-03:00"
+        _links:
+          type: object
+          properties:
+            self:
+              type: object
+              properties:
+                href:
+                  type: string
+                  example:
+                    "http://{{host}}/v1/answer/90e55853-16ca-49a9-90bd-1dee256ab234"
+    PeopleObject:
+      type: "string"
+      format: "uuid"
+      example: "95f2166b-5c07-48e7-9a23-e0a99443d004"
