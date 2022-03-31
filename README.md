@@ -27,7 +27,7 @@ The endpoint's documentation is located in `/docs` folder. It was written on top
 
 **Using it with Docker**
 1. `docker-compose up -d`
-2. Optionally run `docker exec -it geonames-node bash -c 'node command.js populate:db --drop'` to seed the database. 
+2. Optionally run `docker exec -it polls-bbb-node bash -c 'node command.js populate:db --drop'` to seed the database. 
 3. Make calls to the endpoints via [Postman](https://www.getpostman.com/) or similar in the following address `0.0.0.0:8080/v1/answer`
 
 ## Running tests

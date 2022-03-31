@@ -3,7 +3,7 @@ const path = require("path");
 const logPath = path.join(__dirname, "../../logs/prod.log");
 
 module.exports = {
-  hostName: process.env.HOST_NAME || "https://polls-bbb-api-node.heroku.com",
+  hostName: process.env.HOST_NAME || "https://polls-bbb-api-node.herokuapp.com",
   web: {
     port: process.env.PORT,
   },
