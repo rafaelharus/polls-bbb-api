@@ -25,8 +25,8 @@ module.exports = {
   },
   auth: [
     {
-      identity: "82b1eafd-09ab-41a9-badb-0e20c9facb4f",
-      credential: "04696d2e-9421-4443-a927-21275c86026b",
+      identity: "4c73ec194152cad686f51543cfdfaa35",
+      credential: "32f92443a728c2df306943c021e60b0e",
     },
   ],
 };
