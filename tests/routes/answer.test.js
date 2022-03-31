@@ -60,7 +60,7 @@ describe("Answer", () => {
         ip: "172.217. 22.14",
       };
 
-      const res = await request.post(`/v1/answe`).send(answerPayload);
+      const res = await request.post(`/v1/answer`).send(answerPayload);
       expect(res.statusCode).toBe(201);
       expect(res.body).toHaveProperty("id");
       expect(res.body.personId).toBe("04696d2e-9421-4443-a927-21275c86026b");
