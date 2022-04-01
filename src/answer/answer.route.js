@@ -11,7 +11,7 @@ class Answer extends BaseController {
   }
 
   async create(ctx) {
-    const response = await this.answerService.create(ctx.request.body);
+    const response = await this.answerService.create(ctx);
     this.assert(ctx, 201, response);
     responseBuilder.createResponse(ctx, response.body, response.statusCode);
   }

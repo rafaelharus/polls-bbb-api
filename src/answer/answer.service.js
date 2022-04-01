@@ -10,8 +10,11 @@ class AnswerService extends Baseservice {
     this.repository = opts.answerMapper;
   }
 
-  async create(data) {
+  async create(ctx) {
     try {
+      const data = ctx.request.body;
+      data.ip = ctx.ip;
+      data.userAgent = ctx.get("user-agent");
       const isValid = validateAnswerSchema(data);
       if (isValid instanceof ValidationException) throw isValid;
       return this.sanitizedResponse(201, await this.repository.create(data));
