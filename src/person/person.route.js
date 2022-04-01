@@ -10,6 +10,15 @@ class Person extends BaseController {
     this.personService = personService;
   }
 
+  async get(ctx) {
+    const response = await this.personService.get(
+      ctx.params.id,
+      (ctx.query.deleted || "0") === "1"
+    );
+    this.assert(ctx, 200, response);
+    responseBuilder.createResponse(ctx, response.body, response.statusCode);
+  }
+
   async list(ctx) {
     const response = await this.personService.list(ctx.query);
     this.assert(ctx, 200, response);
@@ -38,4 +47,5 @@ module.exports = createController(Person)
       disableHeader: false,
     }),
   ])
-  .get("/v1/person", "list");
+  .get("/v1/person", "list")
+  .get("/v1/person/:id", "get");

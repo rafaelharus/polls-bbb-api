@@ -21,6 +21,12 @@ class Answer extends BaseController {
     this.assert(ctx, 200, response);
     responseBuilder.createResponse(ctx, response.body, response.statusCode);
   }
+
+  async dashboard(ctx) {
+    const response = await this.answerService.dashboard(ctx.request.body);
+    this.assert(ctx, 200, response);
+    responseBuilder.createResponse(ctx, response.body, response.statusCode);
+  }
 }
 
 module.exports = createController(Answer)
@@ -45,4 +51,5 @@ module.exports = createController(Answer)
     }),
   ])
   .get("/v1/answer", "list")
-  .post("/v1/answer", "create");
+  .post("/v1/answer", "create")
+  .post("/v1/dashboard", "dashboard");

@@ -7,6 +7,35 @@ class AnswerMapper extends BaseMapper {
     super(db, answerModel(), mapperOptions);
   }
 
+  async avgPeople(data) {
+    const { ids, pollId } = data;
+    const agg = await this.collection
+      .aggregate()
+      .match({
+        personId: { $in: ids },
+        pollId,
+      })
+      .group({
+        _id: "$personId",
+        count: { $sum: 1 },
+      })
+      .toArray();
+
+    const list = {};
+    list.total = 0;
+    for (let x = 0; x < agg.length; x += 1) {
+      if (agg[x].count) {
+        const personId = agg[x]._id;
+        const { count } = agg[x];
+
+        list[personId] = agg[x].count;
+        list.total += count;
+      }
+    }
+
+    return list;
+  }
+
   async list(paramsOrig = {}) {
     const params = JSON.parse(JSON.stringify(paramsOrig));
 

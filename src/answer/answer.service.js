@@ -28,6 +28,11 @@ class AnswerService extends Baseservice {
     const embedded = this.repository.toHalCollection(answers);
     return this.sanitizedResponse(200, embedded);
   }
+
+  async dashboard(data) {
+    const response = await this.repository.avgPeople(data);
+    return this.sanitizedResponse(200, response);
+  }
 }
 
 module.exports = AnswerService;
