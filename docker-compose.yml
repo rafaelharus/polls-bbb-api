@@ -12,7 +12,7 @@ services:
       - polls-bbb-network
 
   polls-bbb-node:
-    image: rafaelharus/polls-bbb-node
+    image: rafaelharus/nodejs
     container_name: polls-bbb-node
     restart: unless-stopped
     environment:

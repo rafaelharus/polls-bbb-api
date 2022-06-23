@@ -1,7 +1,7 @@
 /* eslint-disable func-names, no-param-reassign */
 /* eslint import/no-unresolved: [2, { caseSensitive: false }] */
 const Baseservice = require("../common/baseService");
-const ApiError = require('../common/api-error');
+const ApiError = require("../common/api-error");
 
 class PersonService extends Baseservice {
   constructor(opts) {
