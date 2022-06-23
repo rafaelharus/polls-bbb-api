@@ -25,7 +25,7 @@
   "license": "UNLICENSED",
   "private": true,
   "engines": {
-    "node": ">=12"
+    "node": ">=15"
   },
   "dependencies": {
     "@sigfox/koa-prometheus": "^1.1.0",
