@@ -3,22 +3,29 @@
 // (*)IPC: Tem que ficar aqui para todos os modulos lerem a configuração
 global.appConfig = require("./config/index");
 const Koa = require("koa");
+const promHttpMetrics = require("@sigfox/koa-prometheus-http-metrics");
+const prometheus = require("@sigfox/koa-prometheus");
 const KoaBody = require("koa-body");
 const helmet = require("koa-helmet");
 const cors = require("koa2-cors");
 const userAgent = require("koa2-useragent");
-const ErrorMiddleware = require("./src/middleware/error");
-const DebugMiddleware = require("./src/middleware/debug");
-
 const { NewRelicMiddleware } = require("koa-mongo-crud");
 const koaSwagger = require("koa2-swagger-ui");
 const serve = require("koa-static");
 const { createContainer, asValue } = require("awilix");
 const { scopePerRequest, loadControllers } = require("awilix-koa");
+const ErrorMiddleware = require("./src/middleware/error");
+const DebugMiddleware = require("./src/middleware/debug");
 const loadModuleContainer = require("./src/container");
 const config = require("./config");
 
-const app = new Koa();
+const app = new Koa()
+  .use(
+    promHttpMetrics({
+      filter: (path) => !path.includes("/metrics") && !path.includes("/health"),
+    })
+  )
+  .use(prometheus());
 
 const container = createContainer();
 loadModuleContainer(container, config);
