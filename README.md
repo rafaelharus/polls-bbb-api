@@ -33,10 +33,6 @@ The endpoint's documentation is located in `/docs` folder. It was written on top
 ## Running tests
 1. Run `npm run test`
 
-## Live Demo
-1. You can check the api running on Heroku by clicking [here](https://polls-bbb-api-node.herokuapp.com/health).
-2. You can check the simple Angular app running on Heroku by clicking [here](https://polls-bbb-angular.herokuapp.com).
-
 ## Questions and Suggestions?
 Drop me an [e-mail](mailto:rafael.harus@gmail.com)
 
